@@ -2,7 +2,7 @@
   (:require [clojure.string :as string]
             [clout.core :as clout]
             [ring.util.codec
-             :refer [url-encode]]))
+             :refer [form-encode]]))
 
 (defn- sanitize-method
   [method]
@@ -214,9 +214,9 @@
 (defn- build-query-string
   [opts-map]
   (str (some->> opts-map
-                (mapv (fn [[k v]] (str (url-encode (name k))
+                (mapv (fn [[k v]] (str (form-encode (name k))
                                        "="
-                                       (url-encode v))))
+                                       (form-encode v))))
                 (string/join "&")
                 not-empty
                 (str "?"))))
