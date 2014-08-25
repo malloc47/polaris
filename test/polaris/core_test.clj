@@ -1,6 +1,7 @@
 (ns polaris.core-test
   (:require [clojure.test :refer :all]
-            [polaris.core :refer :all]))
+            [polaris.core :refer :all])
+  (:import [java.net URLDecoder]))
 
 (defn home
   [request]
@@ -89,4 +90,8 @@
             "/i-am-subroute/baz/got-keyword?"))
     (is (= "YOU ARE HOME"
            (:body (handler {:uri "/idents-are-optional"}))
-           (:body (handler {:uri "/many-are-possible-too"}))))))
+           (:body (handler {:uri "/many-are-possible-too"}))))
+    (is (= (-> routes
+               (reverse-route :child {:query-param "with+plus"})
+               (URLDecoder/decode))
+           "/child?query-param=with+plus"))))
